@@ -1,0 +1,160 @@
+/* structure */
+body {
+  background-color: #1d1c16;
+  color: #ffffff;
+  font-family: "Fira Code", "Lato";
+}
+
+h1 {
+  font-family: "Roboto Serif", serif;
+  font-weight: 700;
+  font-size: 60px;
+  margin-bottom: 30px;
+  background-color: #00BCD4;
+  color: #212121;
+}
+
+h2 {
+  font-family: "Roboto Serif";
+  font-weight: 700;
+  font-size: 46px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+h3 {
+  font-family: "Roboto Serif";
+  font-weight: 700;
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+h4 {
+  font-family: "Roboto Serif";
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+a, a:hover {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+p {
+  font-family: "Fira Code", "Lato";
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.page-content {
+  max-width: 1080px;
+  margin: auto;
+  padding: 0px 20px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.section {
+  min-height: 100vh;
+  margin: auto 0px;
+  border-bottom: 1px solid;
+}
+
+
+/* properties */
+.flex-left {
+  display: flex;
+  justify-content: left;
+}
+
+.flex-vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* elements */
+.spa {
+  display: flex;
+  justify-content: space-between;
+}
+
+.topbar {
+  background-color: #E64A19;
+  padding: 10px;
+  position: absolute;
+  top: 0px;
+  height: 10vh;
+}
+
+.topbar a {
+  font-family: "Fira Code", "Lato";
+  font-weight: 400;
+}
+
+#site-title {
+  font-family: "Fira Code", "Lato";
+  font-weight: 400;
+  font-size: 26px;
+  margin-right: 320px;
+}
+
+.sidebar {
+  background-color: #E64A19;
+  padding: 30px;
+  position: sticky;
+  top: 0px;
+}
+
+.sidebar a {
+  font-family: "Fira Code", "Lato";
+  font-weight: 400;
+  color: #212121;
+}
+
+.primaryColorText {
+  color: #E64A19;
+}
+
+
+/* larger screens */
+@media (min-width: 760px) {
+  .topbar {
+    position: sticky;
+    top: 0px;
+    width: 100%;
+  }
+
+  .topbar div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .topbar p {
+    padding: 10px;
+    margin: 0px 10px;
+  }
+
+  .sidebar {
+    height: 90vh;
+    width: 20%;
+  }
+
+  .sidebar > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+  }
+}
+
+/* smaller screens */
+@media (max-width: 760px) {
+
+}
