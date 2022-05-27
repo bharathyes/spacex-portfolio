@@ -50,8 +50,19 @@ p {
   font-size: 18px;
 }
 
-section p {
+section {
+  padding-top: 130px;
+}
+
+section > p {
   text-align: justify;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  border-bottom: #BDBDBD 1px solid;
+}
+
+section > p:last-of-type {
+  border-bottom: none;
 }
 
 .page-content {
@@ -108,7 +119,7 @@ section p {
   background-color: #E64A19;
   padding: 30px;
   position: sticky;
-  top: 0px;
+  top: 80px;
 }
 
 .sidebar p:hover {
@@ -132,7 +143,7 @@ section p {
   .topbar {
     background-color: #E64A19;
     padding: 10px;
-    position: sticky;
+    position: fixed;
     top: 0px;
     width: 100%;
     height: 80px;
