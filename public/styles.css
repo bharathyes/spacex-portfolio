@@ -47,22 +47,42 @@ a, a:hover {
 p {
   font-family: "Fira Code", "Lato";
   font-weight: 400;
-  font-size: 18px;
+  font-size: 20px;
 }
 
-section {
-  padding-top: 130px;
+.dynamic-item {
+  padding-top: 80px;
+  min-height: 100vh;
+
+  top: 80px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-section > p {
+section p {
   text-align: justify;
+  line-height: 200%;
+
   padding-bottom: 20px;
   margin-bottom: 30px;
   border-bottom: #BDBDBD 1px solid;
 }
 
-section > p:last-of-type {
+section p:last-of-type {
   border-bottom: none;
+}
+
+section span {
+  padding: 10px;
+}
+
+section span:first-child {
+  font-weight: 700;
+  color: #212121;
+  background-color: #757575;
+  padding: 2px;
 }
 
 .page-content {
@@ -115,13 +135,6 @@ section > p:last-of-type {
   margin-right: 320px;
 }
 
-.sidebar {
-  background-color: #E64A19;
-  padding: 30px;
-  position: sticky;
-  top: 80px;
-}
-
 .sidebar p:hover {
   background-color: #FF5722;
   box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.14), 0px 1px 10px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.2);
@@ -143,7 +156,7 @@ section > p:last-of-type {
   .topbar {
     background-color: #E64A19;
     padding: 10px;
-    position: fixed;
+    position: sticky;
     top: 0px;
     width: 100%;
     height: 80px;
@@ -163,6 +176,11 @@ section > p:last-of-type {
   }
 
   .sidebar {
+    background-color: #E64A19;
+    padding: 30px;
+    position: sticky;
+    top: 80px;
+
     height: calc(100vh - 80px);
     width: 20%;
   }
@@ -171,8 +189,10 @@ section > p:last-of-type {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    text-align: left;
+    
     height: 100%;
-    text-align: center;
+    overflow-y: scroll;
   }
 }
 
