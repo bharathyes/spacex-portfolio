@@ -34,12 +34,11 @@ const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     addResourcesToCache([
-      '/public/',
-      '/public/index.html',
-      '/public/styles.css',
-      '/public/reboot.css',
-      '/public/app.js',
-      '/public/sw.js',
+      './index.html',
+      './styles.css',
+      './reboot.css',
+      './app.js',
+      './sw.js',
     ])
   );
 });
