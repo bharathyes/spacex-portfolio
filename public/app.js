@@ -41,7 +41,11 @@ async function fetchApiData() {
   localStorage.setItem("capsulesData", JSON.stringify(data.data.capsules));
   localStorage.setItem("landpadsData", JSON.stringify(data.data.landpads));
 }
-await fetchApiData();
+
+let reloadTestData = localStorage.getItem("rocketsData");
+if (reloadTestData === null) {
+  await fetchApiData();
+}
 
 async function renderData(data, type) {
   let titleKey;
@@ -101,7 +105,13 @@ async function renderData(data, type) {
         var keySpan = document.createElement("span");
         var valueSpan = document.createElement("span");
         keySpan.innerHTML = key;
-        valueSpan.innerHTML = "  " + JSON.stringify(value);
+        if (typeof value === "object") {
+          valueSpan.innerHTML = "  " + JSON.stringify(value);
+        } else if (key.match(".*date.*")) {
+          valueSpan.innerHTML = new Date(value).toLocaleDateString();
+        } else {
+          valueSpan.innerHTML = "  " + value;
+        }
         para.appendChild(keySpan);
         para.appendChild(valueSpan);
         arrItem.appendChild(para);
@@ -116,29 +126,29 @@ document
   .addEventListener("click", async () => {
     let data = JSON.parse(localStorage.getItem("launchData"));
     renderData(data, "launch");
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   });
-  
-  document.getElementById("rocketsButton").addEventListener("click", async () => {
-    let data = JSON.parse(localStorage.getItem("rocketsData"));
-    renderData(data, "rocket");
-    window.scrollTo(0,0);
-  });
-  
-  document
+
+document.getElementById("rocketsButton").addEventListener("click", async () => {
+  let data = JSON.parse(localStorage.getItem("rocketsData"));
+  renderData(data, "rocket");
+  window.scrollTo(0, 0);
+});
+
+document
   .getElementById("capsulesButton")
   .addEventListener("click", async () => {
     let data = JSON.parse(localStorage.getItem("capsulesData"));
     renderData(data, "capsule");
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   });
-  
-  document
+
+document
   .getElementById("spacePortButton")
   .addEventListener("click", async () => {
     let data = JSON.parse(localStorage.getItem("landpadsData"));
     renderData(data, "landpad");
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   });
 
 renderData(JSON.parse(localStorage.getItem("launchData")), "launch");

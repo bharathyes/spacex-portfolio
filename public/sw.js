@@ -36,6 +36,10 @@ self.addEventListener("install", (event) => {
     addResourcesToCache([
       '/public/',
       '/public/index.html',
+      '/public/styles.css',
+      '/public/reboot.css',
+      '/public/app.js',
+      '/public/sw.js',
     ])
   );
 });
