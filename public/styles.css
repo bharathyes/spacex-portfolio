@@ -8,18 +8,15 @@ body {
 h1 {
   font-family: "Roboto Serif", serif;
   font-weight: 700;
-  font-size: 60px;
+  font-size: 32px;
   margin-bottom: 30px;
-  padding: 10px;
-  background-color: #00BCD4;
-  color: #212121;
-  text-align: center;
+  color: #ffffff;
 }
 
 h2 {
   font-family: "Roboto Serif";
   font-weight: 700;
-  font-size: 46px;
+  font-size: 28px;
   margin-bottom: 20px;
   color: #ffffff;
 }
@@ -27,7 +24,7 @@ h2 {
 h3 {
   font-family: "Roboto Serif";
   font-weight: 700;
-  font-size: 26px;
+  font-size: 24px;
   margin-bottom: 20px;
   color: #ffffff;
 }
@@ -59,6 +56,17 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+section h2 {
+  font-family: "Roboto Serif", serif;
+  font-weight: 700;
+  font-size: 60px;
+  margin-bottom: 30px;
+  padding: 10px;
+  background-color: #00BCD4;
+  color: #212121;
+  text-align: center;
 }
 
 section p {
@@ -131,10 +139,7 @@ section span:first-child {
 }
 
 #site-title {
-  font-family: "Fira Code", "Lato";
-  font-weight: 400;
-  font-size: 24px;
-  margin-right: 320px;
+  margin-bottom: 0px;
 }
 
 .sidebar h3 {

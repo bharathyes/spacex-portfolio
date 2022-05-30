@@ -95,7 +95,7 @@ async function renderData(data, type) {
 
     Object.entries(element).forEach(([key, value]) => {
       if (key === titleKey) {
-        let title = document.createElement("h1");
+        let title = document.createElement("h2");
         arrItem.setAttribute("id", value);
         title.innerHTML = value;
         arrItem.appendChild(title);
