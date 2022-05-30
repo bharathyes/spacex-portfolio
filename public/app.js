@@ -31,7 +31,7 @@ async function fetchApiData() {
     headers: {
       "Content-Type": "application/json",
     },
-    "body": "{\"query\":\"{\\n  launches(limit: 10) {\\n    mission_name\\n    id\\n    details\\n    launch_success\\n    launch_year\\n    launch_date_utc\\n    rocket {\\n      rocket_name\\n      rocket_type\\n    }\\n    launch_site {\\n      site_name_long\\n    }\\n    static_fire_date_utc\\n  }\\n  rockets(limit: 10) {\\n    name\\n    id\\n    description\\n    type\\n    active\\n    country\\n    first_flight\\n    cost_per_launch\\n    height {\\n      meters\\n    }\\n    mass {\\n      kg\\n    }\\n    boosters\\n    stages\\n    engines {\\n      number\\n      propellant_1\\n      propellant_2\\n      thrust_to_weight\\n      version\\n      type\\n    }\\n    first_stage {\\n      reusable\\n      fuel_amount_tons\\n      engines\\n      burn_time_sec\\n    }\\n    second_stage {\\n      burn_time_sec\\n      engines\\n      fuel_amount_tons\\n    }\\n    success_rate_pct\\n    wikipedia\\n  }\\n  capsules(limit: 10) {\\n    id\\n    type\\n    landings\\n    status\\n    missions {\\n      name\\n    }\\n    original_launch\\n    reuse_count\\n  }\\n  landpads(limit: 10) {\\n    id\\n    full_name\\n    details\\n    location {\\n      name\\n    }\\n    status\\n    attempted_landings\\n    successful_landings\\n    landing_type\\n    wikipedia\\n  }\\n}\\n\"}"
+    "body": "{\"query\":\"{\\n  launches(limit: 13) {\\n    mission_name\\n    id\\n    details\\n    launch_success\\n    launch_year\\n    launch_date_utc\\n    rocket {\\n      rocket_name\\n      rocket_type\\n    }\\n    launch_site {\\n      site_name_long\\n    }\\n    static_fire_date_utc\\n  }\\n  rockets(limit: 13) {\\n    name\\n    id\\n    description\\n    type\\n    active\\n    country\\n    first_flight\\n    cost_per_launch\\n    height {\\n      meters\\n    }\\n    mass {\\n      kg\\n    }\\n    boosters\\n    stages\\n    engines {\\n      number\\n      propellant_1\\n      propellant_2\\n      thrust_to_weight\\n      version\\n      type\\n    }\\n    first_stage {\\n      reusable\\n      fuel_amount_tons\\n      engines\\n      burn_time_sec\\n    }\\n    second_stage {\\n      burn_time_sec\\n      engines\\n      fuel_amount_tons\\n    }\\n    success_rate_pct\\n    wikipedia\\n  }\\n  capsules(limit: 13) {\\n    id\\n    type\\n    landings\\n    status\\n    missions {\\n      name\\n    }\\n    original_launch\\n    reuse_count\\n  }\\n  landpads(limit: 13) {\\n    full_name\\n    id\\n    details\\n    location {\\n      name\\n    }\\n    status\\n    attempted_landings\\n    successful_landings\\n    landing_type\\n    wikipedia\\n  }\\n}\\n\"}"
   });
 
   let data = await response.json();
@@ -41,38 +41,39 @@ async function fetchApiData() {
   localStorage.setItem("capsulesData", JSON.stringify(data.data.capsules));
   localStorage.setItem("landpadsData", JSON.stringify(data.data.landpads));
 }
-fetchApiData();
+await fetchApiData();
 
-// get data from local storage else fetch from server
-async function renderLaunchData() {
-  console.log("Getting launch data from local storage...");
-  return JSON.parse(localStorage.getItem("launchData"));
-}
-
-async function renderData(data, type, id, title) {
+async function renderData(data, type) {
   
-}
-
-let sidebarCounter = 0;
-
-renderLaunchData().then((data) => {
-  console.log(data);
+  let titleKey;
+  if (type === "launch") {
+    titleKey = "mission_name";
+  } else if (type === "capsule") { 
+    titleKey = "id";
+  } else if (type === "landpad") {
+    titleKey = "full_name";
+  } else {
+    titleKey = "name";
+  }
   let coreContainer = document.getElementById("dynamic-content");
-  // document.getElementById("title-name").innerHTML = data[0].mission_name;
+  coreContainer.innerHTML = "";
 
+  let sidebarCounter = 0;
+  let sideItem = document.getElementById("sidebar-container");
+  sideItem.innerHTML = "";
+
+  // traverse response array
   data.forEach((element) => {
 
     //  add element title to the sidebar
     Object.entries(element).forEach(([key, value]) => {
 
-      let sideItem = document.getElementById("sidebar-container");
-      
-      if (key === "id") {
+      if (key === titleKey) {
         let link = document.createElement("a");
         let linkUrl = `#${value}`;
         link.setAttribute("href", linkUrl);
 
-        let title = document.createElement("p");
+        let title = document.createElement("h3");
         let counterSpan = document.createElement("span");
         let titleSpan = document.createElement("span");
         sidebarCounter++;
@@ -93,7 +94,7 @@ renderLaunchData().then((data) => {
     arrItem.setAttribute("class", "dynamic-item");
 
     Object.entries(element).forEach(([key, value]) => {
-      if (key === "id") {
+      if (key === titleKey) {
         let title = document.createElement("h1");
         arrItem.setAttribute("id", value);
         title.innerHTML = value;
@@ -111,6 +112,28 @@ renderLaunchData().then((data) => {
     });
     coreContainer.appendChild(arrItem);
   });
+}
+
+document.getElementById("launchesButton").addEventListener("click", async () => {
+  let data = JSON.parse(localStorage.getItem("launchData"));
+  renderData(data, "launch");
+});
+
+document.getElementById("rocketsButton").addEventListener("click", async () => {
+  let data = JSON.parse(localStorage.getItem("rocketsData"));
+  renderData(data, "rocket");
+});
+
+document.getElementById("capsulesButton").addEventListener("click", async () => {
+  let data = JSON.parse(localStorage.getItem("capsulesData"));
+  renderData(data, "capsule");
+});
+
+document.getElementById("spacePortButton").addEventListener("click", async () => {
+  let data = JSON.parse(localStorage.getItem("landpadsData"));
+  renderData(data, "landpad");
 });
 
 
+
+renderData(JSON.parse(localStorage.getItem("launchData")), "launch");
