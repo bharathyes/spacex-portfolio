@@ -1,12 +1,9 @@
 const registerServiceWorker = async () => {
   if ("serviceWorker" in navigator) {
     try {
-      const registration = await navigator.serviceWorker.register(
-        "./sw.js",
-        {
-          scope: "/",
-        }
-      );
+      const registration = await navigator.serviceWorker.register("./sw.js", {
+        scope: "/",
+      });
       if (registration.installing) {
         console.log("Service worker installing");
       } else if (registration.waiting) {
@@ -31,7 +28,7 @@ async function fetchApiData() {
     headers: {
       "Content-Type": "application/json",
     },
-    body: '{"query":"{\\n  launches {\\n    mission_name\\n    id\\n    details\\n    launch_success\\n    launch_year\\n    launch_date_utc\\n    rocket {\\n      rocket_name\\n      rocket_type\\n    }\\n    launch_site {\\n      site_name_long\\n    }\\n    static_fire_date_utc\\n  }\\n  rockets {\\n    name\\n    id\\n    description\\n    type\\n    active\\n    country\\n    first_flight\\n    cost_per_launch\\n    height {\\n      meters\\n    }\\n    mass {\\n      kg\\n    }\\n    boosters\\n    stages\\n    engines {\\n      number\\n      propellant_1\\n      propellant_2\\n      thrust_to_weight\\n      version\\n      type\\n    }\\n    first_stage {\\n      reusable\\n      fuel_amount_tons\\n      engines\\n      burn_time_sec\\n    }\\n    second_stage {\\n      burn_time_sec\\n      engines\\n      fuel_amount_tons\\n    }\\n    success_rate_pct\\n    wikipedia\\n  }\\n  capsules {\\n    id\\n    type\\n    landings\\n    status\\n    missions {\\n      name\\n    }\\n    original_launch\\n    reuse_count\\n  }\\n  landpads {\\n    full_name\\n    id\\n    details\\n    location {\\n      name\\n    }\\n    status\\n    attempted_landings\\n    successful_landings\\n    landing_type\\n    wikipedia\\n  }\\n}\\n"}',
+    body: '{"query":"{\\n  launches {\\n    mission_name\\n    id\\n    details\\n    launch_success\\n    launch_year\\n    launch_date_utc\\n    rocket {\\n      rocket_name\\n      rocket_type\\n    }\\n    launch_site {\\n      site_name_long\\n    }\\n    static_fire_date_utc\\n  }\\n  rockets {\\n    name\\n    id\\n    description\\n    type\\n    active\\n    country\\n    first_flight\\n    cost_per_launch\\n    height {\\n      meters\\n    }\\n    mass {\\n      kg\\n    }\\n    boosters\\n    stages\\n    engines {\\n      number\\n      propellant_1\\n      propellant_2\\n      thrust_to_weight\\n      version\\n      type\\n    }\\n    first_stage {\\n      reusable\\n      fuel_amount_tons\\n      engines\\n      burn_time_sec\\n    }\\n    second_stage {\\n      burn_time_sec\\n      engines\\n      fuel_amount_tons\\n    }\\n    success_rate_pct\\n    wikipedia\\n  }\\n  capsules {\\n    id\\n    type\\n    landings\\n    status\\n    missions {\\n      name\\n    }\\n    original_launch\\n    reuse_count\\n  }\\n  landpads {\\n    id\\n    full_name\\n    details\\n    location {\\n      name\\n    }\\n    status\\n    attempted_landings\\n    successful_landings\\n    landing_type\\n    wikipedia\\n  }\\n\\t  ships {\\n    name\\n    image\\n    url\\n    id\\n    type\\n    class\\n    speed_kn\\n    weight_kg\\n    year_built\\n    attempted_landings\\n    successful_landings\\n    status\\n  }\\n}\\n"}',
   });
 
   let data = await response.json();
@@ -40,6 +37,7 @@ async function fetchApiData() {
   localStorage.setItem("rocketsData", JSON.stringify(data.data.rockets));
   localStorage.setItem("capsulesData", JSON.stringify(data.data.capsules));
   localStorage.setItem("landpadsData", JSON.stringify(data.data.landpads));
+  localStorage.setItem("shipsData", JSON.stringify(data.data.ships));
 }
 
 let reloadTestData = localStorage.getItem("rocketsData");
@@ -109,11 +107,21 @@ async function renderData(data, type) {
           valueSpan.innerHTML = "  " + JSON.stringify(value);
         } else if (key.match(".*date.*")) {
           valueSpan.innerHTML = new Date(value).toLocaleDateString();
+        } else if (key.match("(url|wikipedia)")) {
+          valueSpan.innerHTML = `<a href="${value}" target="_blank">${value}</a>`;
         } else {
           valueSpan.innerHTML = "  " + value;
         }
         para.appendChild(keySpan);
         para.appendChild(valueSpan);
+        if (key.match(".*image.*")) {
+          let img = document.createElement("img");
+          img.setAttribute("src", value);
+          img.setAttribute("alt", value);
+          para.setAttribute("class", "image-container");
+          para.innerHTML = "";
+          para.appendChild(img);
+        }
         arrItem.appendChild(para);
       }
     });
@@ -148,6 +156,14 @@ document
   .addEventListener("click", async () => {
     let data = JSON.parse(localStorage.getItem("landpadsData"));
     renderData(data, "landpad");
+    window.scrollTo(0, 0);
+  });
+
+document
+  .getElementById("shipsButton")
+  .addEventListener("click", async () => {
+    let data = JSON.parse(localStorage.getItem("shipsData"));
+    renderData(data, "ship");
     window.scrollTo(0, 0);
   });
 
