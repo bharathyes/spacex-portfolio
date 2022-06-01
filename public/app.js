@@ -45,6 +45,16 @@ if (reloadTestData === null) {
   await fetchApiData();
 }
 
+// function jsonDecoratedString(obj) {
+//   let string = "";
+//   if ( typeof obj === "object" ) {
+//     Object.entries(obj).forEach(([key, value]) => {
+//       string += `${key}: ${value}` + " ;  ";
+//     });
+//   }
+//   return string;
+// }
+
 async function renderData(data, type) {
   let titleKey;
   if (type === "launch") {
@@ -104,6 +114,7 @@ async function renderData(data, type) {
         var valueSpan = document.createElement("span");
         keySpan.innerHTML = key;
         if (typeof value === "object") {
+          // valueSpan.innerHTML = "  " + jsonDecoratedString(value);
           valueSpan.innerHTML = "  " + JSON.stringify(value);
         } else if (key.match(".*date.*")) {
           valueSpan.innerHTML = new Date(value).toLocaleDateString();
