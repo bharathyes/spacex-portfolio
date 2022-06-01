@@ -141,6 +141,14 @@ async function renderData(data, type) {
 }
 
 document
+  .getElementById("upcomingLaunchesButton")
+  .addEventListener("click", async () => {
+    let data = JSON.parse(localStorage.getItem("upcomingLaunchData"));
+    renderData(data, "upcomingLaunch");
+    window.scrollTo(0, 0);
+  });
+
+document
   .getElementById("launchesButton")
   .addEventListener("click", async () => {
     let data = JSON.parse(localStorage.getItem("launchData"));
@@ -170,12 +178,10 @@ document
     window.scrollTo(0, 0);
   });
 
-document
-  .getElementById("shipsButton")
-  .addEventListener("click", async () => {
-    let data = JSON.parse(localStorage.getItem("shipsData"));
-    renderData(data, "ship");
-    window.scrollTo(0, 0);
-  });
+document.getElementById("shipsButton").addEventListener("click", async () => {
+  let data = JSON.parse(localStorage.getItem("shipsData"));
+  renderData(data, "ship");
+  window.scrollTo(0, 0);
+});
 
 renderData(JSON.parse(localStorage.getItem("launchData")), "launch");
