@@ -33,6 +33,10 @@ async function fetchApiData() {
 
   let data = await response.json();
 
+  // localStorage.setItem(
+  //   "upcomingLaunchData",
+  //   JSON.stringify(data.data.upcominglaunches)
+  // );
   localStorage.setItem("launchData", JSON.stringify(data.data.launches));
   localStorage.setItem("rocketsData", JSON.stringify(data.data.rockets));
   localStorage.setItem("capsulesData", JSON.stringify(data.data.capsules));
@@ -49,7 +53,7 @@ function jsonDecoratedString(obj) {
   let json = JSON.parse(obj);
   let mainValueSpan = document.createElement("span");
   if (json === null || json === undefined) {
-    return JSON.stringify(obj);
+    return obj;
   }
   Object.entries(json).forEach(([key, value]) => {
     let nestedJson = document.createElement("span");
@@ -64,7 +68,7 @@ async function renderData(data, type) {
   let titleKey;
   if (type === "launch") {
     titleKey = "mission_name";
-  } else if (type === "capsule") {
+  } else if (type.match("(capsule|latestLaunch)")) {
     titleKey = "id";
   } else if (type === "landpad") {
     titleKey = "full_name";
@@ -132,7 +136,7 @@ async function renderData(data, type) {
         }
         para.appendChild(keySpan);
         para.appendChild(valueSpan);
-        if (key.match(".*image.*")) {
+        if (key.match(".*image.*") && value !== null) {
           let img = document.createElement("img");
           img.setAttribute("src", value);
           img.setAttribute("alt", value);
@@ -147,13 +151,13 @@ async function renderData(data, type) {
   });
 }
 
-document
-  .getElementById("upcomingLaunchesButton")
-  .addEventListener("click", async () => {
-    let data = JSON.parse(localStorage.getItem("upcomingLaunchData"));
-    renderData(data, "upcomingLaunch");
-    window.scrollTo(0, 0);
-  });
+// document
+//   .getElementById("latestLaunchesButton")
+//   .addEventListener("click", async () => {
+//     let data = JSON.parse(localStorage.getItem("latestLaunchData"));
+//     renderData(data, "latestLaunch");
+//     window.scrollTo(0, 0);
+//   });
 
 document
   .getElementById("launchesButton")
@@ -192,3 +196,13 @@ document.getElementById("shipsButton").addEventListener("click", async () => {
 });
 
 renderData(JSON.parse(localStorage.getItem("launchData")), "launch");
+
+document.getElementById("menuButton").addEventListener("click", () => {
+  let menu = document.getElementById("hidden-menu");
+  if ( menu.style.display === "block" ) {
+    menu.style.display = "none";
+  } else {
+    menu.style.display = "block";
+  }
+
+});
