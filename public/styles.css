@@ -88,11 +88,19 @@ section span {
   padding: 10px;
 }
 
-section span:first-child {
+.key-span:first-child {
   font-weight: 700;
   color: #212121;
   background-color: #757575;
   padding: 2px;
+}
+
+.nested-json {
+  border-right: #757575 2px solid;
+}
+
+.nested-json:last-of-type {
+  border-right: none;
 }
 
 section a {

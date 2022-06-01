@@ -28,7 +28,7 @@ async function fetchApiData() {
     headers: {
       "Content-Type": "application/json",
     },
-    body: '{"query":"{\\n  launches {\\n    mission_name\\n    id\\n    details\\n    launch_success\\n    launch_year\\n    launch_date_utc\\n    rocket {\\n      rocket_name\\n      rocket_type\\n    }\\n    launch_site {\\n      site_name_long\\n    }\\n    static_fire_date_utc\\n  }\\n  rockets {\\n    name\\n    id\\n    description\\n    type\\n    active\\n    country\\n    first_flight\\n    cost_per_launch\\n    height {\\n      meters\\n    }\\n    mass {\\n      kg\\n    }\\n    boosters\\n    stages\\n    engines {\\n      number\\n      propellant_1\\n      propellant_2\\n      thrust_to_weight\\n      version\\n      type\\n    }\\n    first_stage {\\n      reusable\\n      fuel_amount_tons\\n      engines\\n      burn_time_sec\\n    }\\n    second_stage {\\n      burn_time_sec\\n      engines\\n      fuel_amount_tons\\n    }\\n    success_rate_pct\\n    wikipedia\\n  }\\n  capsules {\\n    id\\n    type\\n    landings\\n    status\\n    missions {\\n      name\\n    }\\n    original_launch\\n    reuse_count\\n  }\\n  landpads {\\n    id\\n    full_name\\n    details\\n    location {\\n      name\\n    }\\n    status\\n    attempted_landings\\n    successful_landings\\n    landing_type\\n    wikipedia\\n  }\\n\\t  ships {\\n    name\\n    image\\n    url\\n    id\\n    type\\n    class\\n    speed_kn\\n    weight_kg\\n    year_built\\n    attempted_landings\\n    successful_landings\\n    status\\n  }\\n}\\n"}',
+    body: '{"query":"{\\n\\tlaunchLatest {\\n\\t\\tid\\n\\t\\tupcoming\\n\\t\\tmission_name\\n\\t\\tlinks {\\n\\t\\t\\tflickr_images\\n\\t\\t\\treddit_media\\n\\t\\t\\tvideo_link\\n\\t\\t}\\n\\t\\tdetails\\n\\t\\tlaunch_date_utc\\n\\t\\tlaunch_site {\\n\\t\\t\\tsite_name_long\\n\\t\\t}\\n\\t\\tlaunch_success\\n\\t}\\n\\tlaunches {\\n\\t\\tmission_name\\n\\t\\tid\\n\\t\\tdetails\\n\\t\\tlaunch_success\\n\\t\\tlaunch_year\\n\\t\\tlaunch_date_utc\\n\\t\\trocket {\\n\\t\\t\\trocket_name\\n\\t\\t\\trocket_type\\n\\t\\t}\\n\\t\\tlaunch_site {\\n\\t\\t\\tsite_name_long\\n\\t\\t}\\n\\t\\tstatic_fire_date_utc\\n\\t}\\n\\trockets {\\n\\t\\tname\\n\\t\\tid\\n\\t\\tdescription\\n\\t\\ttype\\n\\t\\tactive\\n\\t\\tcountry\\n\\t\\tfirst_flight\\n\\t\\tcost_per_launch\\n\\t\\theight {\\n\\t\\t\\tmeters\\n\\t\\t}\\n\\t\\tmass {\\n\\t\\t\\tkg\\n\\t\\t}\\n\\t\\tboosters\\n\\t\\tstages\\n\\t\\tengines {\\n\\t\\t\\tnumber\\n\\t\\t\\tpropellant_1\\n\\t\\t\\tpropellant_2\\n\\t\\t\\tthrust_to_weight\\n\\t\\t\\tversion\\n\\t\\t\\ttype\\n\\t\\t}\\n\\t\\tfirst_stage {\\n\\t\\t\\treusable\\n\\t\\t\\tfuel_amount_tons\\n\\t\\t\\tengines\\n\\t\\t\\tburn_time_sec\\n\\t\\t}\\n\\t\\tsecond_stage {\\n\\t\\t\\tburn_time_sec\\n\\t\\t\\tengines\\n\\t\\t\\tfuel_amount_tons\\n\\t\\t}\\n\\t\\tsuccess_rate_pct\\n\\t\\twikipedia\\n\\t}\\n\\tcapsules {\\n\\t\\tid\\n\\t\\ttype\\n\\t\\tlandings\\n\\t\\tstatus\\n\\t\\tmissions {\\n\\t\\t\\tname\\n\\t\\t}\\n\\t\\toriginal_launch\\n\\t\\treuse_count\\n\\t}\\n\\tlandpads {\\n\\t\\tfull_name\\n\\t\\tid\\n\\t\\tdetails\\n\\t\\tlocation {\\n\\t\\t\\tname\\n\\t\\t}\\n\\t\\tstatus\\n\\t\\tattempted_landings\\n\\t\\tsuccessful_landings\\n\\t\\tlanding_type\\n\\t\\twikipedia\\n\\t}\\n\\tships {\\n\\t\\tname\\n\\t\\timage\\n\\t\\turl\\n\\t\\tid\\n\\t\\ttype\\n\\t\\tclass\\n\\t\\tweight_kg\\n\\t\\tyear_built\\n\\t}\\n}\\n"}',
   });
 
   let data = await response.json();
@@ -45,15 +45,20 @@ if (reloadTestData === null) {
   await fetchApiData();
 }
 
-// function jsonDecoratedString(obj) {
-//   let string = "";
-//   if ( typeof obj === "object" ) {
-//     Object.entries(obj).forEach(([key, value]) => {
-//       string += `${key}: ${value}` + " ;  ";
-//     });
-//   }
-//   return string;
-// }
+function jsonDecoratedString(obj) {
+  let json = JSON.parse(obj);
+  let mainValueSpan = document.createElement("span");
+  if (json === null || json === undefined) {
+    return JSON.stringify(obj);
+  }
+  Object.entries(json).forEach(([key, value]) => {
+    let nestedJson = document.createElement("span");
+    nestedJson.classList.add("nested-json");
+    nestedJson.innerHTML = `${key}: ${value}`;
+    mainValueSpan.appendChild(nestedJson);
+  });
+  return mainValueSpan.innerHTML;
+}
 
 async function renderData(data, type) {
   let titleKey;
@@ -111,11 +116,13 @@ async function renderData(data, type) {
       } else {
         var para = document.createElement("p");
         var keySpan = document.createElement("span");
+        keySpan.classList.add("key-span");
         var valueSpan = document.createElement("span");
         keySpan.innerHTML = key;
         if (typeof value === "object") {
-          // valueSpan.innerHTML = "  " + jsonDecoratedString(value);
-          valueSpan.innerHTML = "  " + JSON.stringify(value);
+          valueSpan.innerHTML =
+            "  " + jsonDecoratedString(JSON.stringify(value));
+          // valueSpan.innerHTML = "  " + JSON.stringify(value);
         } else if (key.match(".*date.*")) {
           valueSpan.innerHTML = new Date(value).toLocaleDateString();
         } else if (key.match("(url|wikipedia)")) {
