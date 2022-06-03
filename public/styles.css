@@ -277,6 +277,10 @@ nav {
   .page-content {
     max-width: 70%;
   }
+
+  .link-value { 
+    width: 700px;
+  }
 }
 
 /* smaller screens */
