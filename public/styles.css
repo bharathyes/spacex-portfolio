@@ -109,7 +109,7 @@ section a {
 
 .image-container {
   max-width: 100%;
-  width: auto;
+  width: 100%;
   height: auto;
   border-bottom: none;
 }
@@ -190,6 +190,7 @@ nav {
 
 #site-title {
   margin: 10px;
+  overflow: hidden;
 }
 
 .sidebar h3 {
@@ -208,19 +209,36 @@ nav {
   font-weight: 400;
 }
 
+.link-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 400px;
+
+  border: 0px;
+  margin-right: 0px;
+  padding: 0px;
+}
+
 .primaryColorText {
   color: #E64A19;
 }
 
 #hidden-menu {
   display: none;
+  position: fixed;
+  width: 100%;
+  background-color: #E64A19;
+  padding: 20px;
 }
-
 
 /* larger screens */
 @media (min-width: 760px) {
 
   #menuButton {
+    display: none;
+  }
+
+  #hidden-menu {
     display: none;
   }
 
@@ -236,6 +254,7 @@ nav {
 
     height: calc(100vh - 80px);
     width: 20%;
+    min-width: 200px;
   }
 
   .sidebar > div {
@@ -247,6 +266,10 @@ nav {
     max-height: 100%;
     min-height: fit-content;
     overflow-y: auto;
+  }
+
+  .page-content {
+    max-width: 70%;
   }
 }
 
@@ -265,20 +288,15 @@ nav {
     display: none;
   }
 
-  #hidden-menu {
-    position: fixed;
-
-    width: 100%;
-
-    background-color: #E64A19;
-    padding: 20px;
-  }
-
   .menu-buttons {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  .page-content {
+    max-width: 80%;
   }
 
 }

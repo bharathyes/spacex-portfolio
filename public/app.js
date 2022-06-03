@@ -33,10 +33,6 @@ async function fetchApiData() {
 
   let data = await response.json();
 
-  // localStorage.setItem(
-  //   "upcomingLaunchData",
-  //   JSON.stringify(data.data.upcominglaunches)
-  // );
   localStorage.setItem("launchData", JSON.stringify(data.data.launches));
   localStorage.setItem("rocketsData", JSON.stringify(data.data.rockets));
   localStorage.setItem("capsulesData", JSON.stringify(data.data.capsules));
@@ -44,9 +40,15 @@ async function fetchApiData() {
   localStorage.setItem("shipsData", JSON.stringify(data.data.ships));
 }
 
+async function loadVideoFile() {
+  let videoListFile = await fetch("./videos/video-list.json");
+  localStorage.setItem("videosData", JSON.stringify(await videoListFile.json()));
+}
+
 let reloadTestData = localStorage.getItem("rocketsData");
 if (reloadTestData === null) {
   await fetchApiData();
+  await loadVideoFile();
 }
 
 function jsonDecoratedString(obj) {
@@ -130,7 +132,8 @@ async function renderData(data, type) {
         } else if (key.match(".*date.*")) {
           valueSpan.innerHTML = new Date(value).toLocaleDateString();
         } else if (key.match("(url|wikipedia)")) {
-          valueSpan.innerHTML = `<a href="${value}" target="_blank">${value}</a>`;
+          para.classList.add("spa");
+          valueSpan.innerHTML = `<a href="${value}"><p class="link-value">${value}</p></a>`;
         } else {
           valueSpan.innerHTML = "  " + value;
         }
@@ -143,6 +146,18 @@ async function renderData(data, type) {
           para.setAttribute("class", "image-container");
           para.innerHTML = "";
           para.appendChild(img);
+        } else if (key.match(".*video.*") && value !== null) {
+          let vid = document.createElement("video");
+          let src = document.createElement("source");
+          src.setAttribute("src", value);
+          src.setAttribute("type", "video/webm");
+          vid.appendChild(src);
+          vid.setAttribute("controls", "controls");
+          vid.setAttribute("width", "100%");
+          
+          para.setAttribute("class", "image-container");
+          para.innerHTML = "";
+          para.appendChild(vid);
         }
         arrItem.appendChild(para);
       }
@@ -151,58 +166,62 @@ async function renderData(data, type) {
   });
 }
 
-// document
-//   .getElementById("latestLaunchesButton")
-//   .addEventListener("click", async () => {
-//     let data = JSON.parse(localStorage.getItem("latestLaunchData"));
-//     renderData(data, "latestLaunch");
-//     window.scrollTo(0, 0);
-//   });
-
-document
-  .getElementById("launchesButton")
-  .addEventListener("click", async () => {
-    let data = JSON.parse(localStorage.getItem("launchData"));
-    renderData(data, "launch");
-    window.scrollTo(0, 0);
-  });
-
-document.getElementById("rocketsButton").addEventListener("click", async () => {
-  let data = JSON.parse(localStorage.getItem("rocketsData"));
-  renderData(data, "rocket");
-  window.scrollTo(0, 0);
-});
-
-document
-  .getElementById("capsulesButton")
-  .addEventListener("click", async () => {
-    let data = JSON.parse(localStorage.getItem("capsulesData"));
-    renderData(data, "capsule");
-    window.scrollTo(0, 0);
-  });
-
-document
-  .getElementById("spacePortButton")
-  .addEventListener("click", async () => {
-    let data = JSON.parse(localStorage.getItem("landpadsData"));
-    renderData(data, "landpad");
-    window.scrollTo(0, 0);
-  });
-
-document.getElementById("shipsButton").addEventListener("click", async () => {
-  let data = JSON.parse(localStorage.getItem("shipsData"));
-  renderData(data, "ship");
-  window.scrollTo(0, 0);
-});
-
-renderData(JSON.parse(localStorage.getItem("launchData")), "launch");
-
 document.getElementById("menuButton").addEventListener("click", () => {
   let menu = document.getElementById("hidden-menu");
-  if ( menu.style.display === "block" ) {
+  if (menu.style.display === "block") {
     menu.style.display = "none";
   } else {
     menu.style.display = "block";
   }
-
 });
+
+
+Array.from(document.getElementsByClassName("launchesButton")).forEach((element) => {
+  element.addEventListener("click", async () => {
+    let data = JSON.parse(localStorage.getItem("launchData"));
+    renderData(data, "launch");
+    window.scrollTo(0, 0);
+  });
+});
+
+Array.from(document.getElementsByClassName("rocketsButton")).forEach((element) => {
+  element.addEventListener("click", async () => {
+    let data = JSON.parse(localStorage.getItem("rocketsData"));
+    renderData(data, "rocket");
+    window.scrollTo(0, 0);
+  });
+});
+
+Array.from(document.getElementsByClassName("capsulesButton")).forEach((element) => {
+  element.addEventListener("click", async () => {
+    let data = JSON.parse(localStorage.getItem("capsulesData"));
+    renderData(data, "capsule");
+    window.scrollTo(0, 0);
+  });
+});
+
+Array.from(document.getElementsByClassName("spacePortButton")).forEach((element) => {
+  element.addEventListener("click", async () => {
+    let data = JSON.parse(localStorage.getItem("landpadsData"));
+    renderData(data, "landpad");
+    window.scrollTo(0, 0);
+  });
+});
+
+Array.from(document.getElementsByClassName("shipsButton")).forEach((element) => {
+  element.addEventListener("click", async () => {
+    let data = JSON.parse(localStorage.getItem("shipsData"));
+    renderData(data, "ship");
+    window.scrollTo(0, 0);
+  });
+});
+
+Array.from(document.getElementsByClassName("videosButton")).forEach((element) => {
+  element.addEventListener("click", async () => {
+    let data = JSON.parse(localStorage.getItem("videosData"));
+    renderData(data, "videos");
+    window.scrollTo(0, 0);
+  });
+});
+
+renderData(JSON.parse(localStorage.getItem("videosData")), "videos");
