@@ -151,6 +151,11 @@ img {
   justify-content: space-between;
 }
 
+.flex-left {
+  display: flex;
+  justify-content: left;
+}
+
 header {
   background-color: #E64A19;
   padding: 10px;
@@ -211,6 +216,7 @@ nav {
 
 .link-value {
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
   width: 400px;
 

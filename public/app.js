@@ -132,7 +132,7 @@ async function renderData(data, type) {
         } else if (key.match(".*date.*")) {
           valueSpan.innerHTML = new Date(value).toLocaleDateString();
         } else if (key.match("(url|wikipedia)")) {
-          para.classList.add("spa");
+          para.classList.add("flex-left");
           valueSpan.innerHTML = `<a href="${value}"><p class="link-value">${value}</p></a>`;
         } else {
           valueSpan.innerHTML = "  " + value;
